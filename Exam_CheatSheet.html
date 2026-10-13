@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>خلاصة الامتحان 100% - Web API</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --card-border: #334155;
+            --accent: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-amber: #fbbf24;
+            --accent-red: #f87171;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --code-bg: #090d16;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.55;
+            padding-bottom: 60px;
+            font-size: 15px;
+        }
+
+        /* Sticky Mobile Navbar */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 10px 8px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .top-nav::-webkit-scrollbar { display: none; }
+
+        .nav-pill {
+            background: var(--card);
+            color: var(--accent);
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .nav-pill.err { color: var(--accent-red); border-color: rgba(248, 113, 113, 0.4); }
+        .nav-pill.pag { color: var(--accent-green); border-color: rgba(74, 222, 128, 0.4); }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border: 1px solid #3b82f6;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 19px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .hero p {
+            font-size: 13.5px;
+            color: #bfdbfe;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 22px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 14px;
+        }
+
+        .card-header {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: #334155;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .note {
+            font-size: 13.5px;
+            color: #e2e8f0;
+            background: rgba(56, 189, 248, 0.1);
+            border-right: 3px solid var(--accent);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        .warn {
+            font-size: 13.5px;
+            color: #fef08a;
+            background: rgba(251, 191, 36, 0.12);
+            border-right: 3px solid var(--accent-amber);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        /* Code Block Optimized for Mobile */
+        pre {
+            direction: ltr;
+            text-align: left;
+            background: var(--code-bg);
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 11px;
+            overflow-x: auto;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #e2e8f0;
+            margin-top: 6px;
+        }
+
+        .kw { color: #f472b6; font-weight: bold; }   /* new, async, await, return, public */
+        .tp { color: #38bdf8; }                      /* Types/Classes */
+        .st { color: #a7f3d0; }                      /* Strings */
+        .cm { color: #64748b; font-style: italic; }  /* Comments */
+        .hl { background: rgba(251, 191, 36, 0.18); padding: 1px 4px; border-radius: 4px; color: #fde047; font-weight: bold; }
+
+        /* Error Cards */
+        .err-card {
+            background: #1a1523;
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            border-right: 4px solid var(--accent-red);
+            border-radius: 10px;
+            padding: 11px 12px;
+            margin-bottom: 10px;
+        }
+        .err-title {
+            color: var(--accent-red);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+            direction: ltr;
+            text-align: left;
+        }
+        .err-fix {
+            color: #e2e8f0;
+            font-size: 13.5px;
+        }
+        .err-fix b {
+            color: var(--accent-green);
+        }
+
+        ul.clean-list {
+            padding-right: 18px;
+            font-size: 13.5px;
+        }
+        ul.clean-list li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط تنقل سريع بالموبايل -->
+    <nav class="top-nav">
+        <a href="#dal" class="nav-pill">1. DAL & Packages</a>
+        <a href="#json-prog" class="nav-pill">2. JSON & Program.cs</a>
+        <a href="#service" class="nav-pill">3. AccountService</a>
+        <a href="#controller" class="nav-pill">4. Controller & UserId</a>
+        <a href="#pagination" class="nav-pill pag">5. Pagination & Filter</a>
+        <a href="#errors" class="nav-pill err">6. الإيرورات وحلها</a>
+    </nav>
+
+    <div class="container">
+
+        <div class="hero">
+            <h1>🚀 الخلاصة النهائية للامتحان (100%)</h1>
+            <p>أنت كاتب الكود ده بإيدك ومقفله.. اقرأ بهدوء وأنت قدها ونص! 💪</p>
+        </div>
+
+        <!-- ==================== 1. DAL & PACKAGES ==================== -->
+        <div id="dal" class="section-title">📦 1. الباكدجات والـ DAL (Identity)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>الباكدجات المطلوبة (NuGet)</span>
+                <span class="badge">أول خطوة</span>
+            </div>
+            <ul class="clean-list">
+                <li>في <b>DAL</b>: نزل <code>Microsoft.AspNetCore.Identity.EntityFrameworkCore</code></li>
+                <li>في <b>API</b>: نزل <code>Microsoft.AspNetCore.Authentication.JwtBearer</code></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ApplicationUser.cs</span>
+                <span class="badge">DAL / Models</span>
+            </div>
+<pre><span class="kw">public class</span> <span class="tp">ApplicationUser</span> : <span class="tp">IdentityUser</span>&lt;<span class="kw">int</span>&gt;
+{
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ApplicationContext.cs</span>
+                <span class="badge">DAL / Data</span>
+            </div>
+<pre><span class="kw">public class</span> <span class="tp">ApplicationContext</span> : <span class="tp">IdentityDbContext</span>&lt;<span class="tp">ApplicationUser</span>, <span class="tp">IdentityRole</span>&lt;<span class="kw">int</span>&gt;, <span class="kw">int</span>&gt;
+{
+    <span class="kw">public</span> ApplicationContext(<span class="tp">DbContextOptions</span> options) : <span class="kw">base</span>(options) { }
+
+    <span class="kw">public</span> <span class="tp">DbSet</span>&lt;<span class="tp">ApplicationUser</span>&gt; ApplicationUsers { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="cm">// باقي الـ DbSets ...</span>
+
+    <span class="kw">protected override void</span> OnModelCreating(<span class="tp">ModelBuilder</span> modelBuilder)
+    {
+        <span class="hl">base.OnModelCreating(modelBuilder);</span> <span class="cm">// أوعى تنسى السطر ده مع الـ Identity!</span>
+    }
+}</pre>
+        </div>
+
+        <!-- ==================== 2. JSON & PROGRAM.CS ==================== -->
+        <div id="json-prog" class="section-title">⚙️ 2. ملفات الـ API (JSON & Program.cs)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>appsettings.json</span>
+                <span class="badge">API</span>
+            </div>
+            <div class="warn">⚠️ الـ <b>Key</b> لازم يكون سطر طويل (أكتر من 35 حرف) عشان التشفير ميضربش!</div>
+<pre>{
+  <span class="st">"ConnectionStrings"</span>: {
+    <span class="st">"conn"</span>: <span class="st">"Data Source=Mo-Elshinawy;Initial Catalog=MyDb;Integrated Security=True;Encrypt=False"</span>
+  },
+  <span class="st">"JWT"</span>: {
+    <span class="st">"Key"</span>: <span class="st">"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffggggggggggggg"</span>,
+    <span class="st">"Issuer"</span>: <span class="st">"shino"</span>,
+    <span class="st">"Audience"</span>: <span class="st">"shino"</span>
+  }
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>Program.cs (كل كود الـ Identity والـ JWT)</span>
+                <span class="badge">API</span>
+            </div>
+<pre><span class="cm">// 1. تسجيل الـ DbContext والـ Repos والـ Services</span>
+builder.Services.AddDbContext&lt;<span class="tp">ApplicationContext</span>&gt;(x =&gt;
+    x.UseSqlServer(builder.Configuration.GetConnectionString(<span class="st">"conn"</span>)));
+
+builder.Services.AddScoped&lt;<span class="tp">IAccountService</span>, <span class="tp">AccountService</span>&gt;();
+
+<span class="cm">// 2. تسجيل الـ Identity</span>
+builder.Services.AddIdentity&lt;<span class="tp">ApplicationUser</span>, <span class="tp">IdentityRole</span>&lt;<span class="kw">int</span>&gt;&gt;()
+    .AddEntityFrameworkStores&lt;<span class="tp">ApplicationContext</span>&gt;()
+    .AddDefaultTokenProviders();
+
+<span class="cm">// 3. تسجيل الـ Authentication والـ JWT Bearer</span>
+builder.Services.AddAuthentication(x =&gt;
+{
+    x.DefaultAuthenticateScheme = <span class="tp">JwtBearerDefaults</span>.AuthenticationScheme;
+    x.DefaultChallengeScheme = <span class="tp">JwtBearerDefaults</span>.AuthenticationScheme;
+})
+.AddJwtBearer(options =&gt;
+{
+    options.TokenValidationParameters = <span class="hl">new</span> <span class="tp">TokenValidationParameters</span>
+    {
+        IssuerSigningKey = <span class="hl">new</span> <span class="tp">SymmetricSecurityKey</span>(
+            <span class="tp">Encoding</span>.UTF8.GetBytes(builder.Configuration[<span class="st">"JWT:Key"</span>]!)),
+        ValidateIssuerSigningKey = <span class="kw">true</span>,
+        ValidateIssuer = <span class="kw">false</span>,
+        ValidateAudience = <span class="kw">false</span>
+    };
+});
+
+<span class="kw">var</span> app = builder.Build();
+
+<span class="cm">// ...</span>
+app.UseHttpsRedirection();
+
+<span class="cm">// 4. لازم بالترتيب ده قبل MapControllers:</span>
+<span class="hl">app.UseAuthentication();</span>
+<span class="hl">app.UseAuthorization();</span>
+
+app.MapControllers();
+app.Run();</pre>
+        </div>
+
+        <!-- ==================== 3. ACCOUNT SERVICE ==================== -->
+        <div id="service" class="section-title">🔐 3. الـ DTOs والـ AccountService (BL)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>RegisterDTO & LoginDTO & IAccountService</span>
+                <span class="badge">BL</span>
+            </div>
+<pre><span class="kw">public class</span> <span class="tp">RegisterDTO</span>
+{
+    <span class="kw">public string</span> UserName { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Email { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Password { <span class="kw">get</span>; <span class="kw">set</span>; }
+}
+
+<span class="kw">public class</span> <span class="tp">LoginDTO</span>
+{
+    <span class="kw">public string</span> UserName { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Password { <span class="kw">get</span>; <span class="kw">set</span>; }
+}
+
+<span class="kw">public interface</span> <span class="tp">IAccountService</span>
+{
+    <span class="tp">Task</span>&lt;<span class="kw">string</span>&gt; Register(<span class="tp">RegisterDTO</span> dTO);
+    <span class="tp">Task</span>&lt;<span class="kw">string</span>&gt; Login(<span class="tp">LoginDTO</span> dTO);
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>AccountService.cs (Register + Login كاملة)</span>
+                <span class="badge">BL / Services</span>
+            </div>
+            <div class="note">💡 افتكر خطوات التوكن: <b>Claims ⬅️ Key ⬅️ SigningCredentials ⬅️ JwtSecurityToken ⬅️ WriteToken</b> (وكلهم قبلهم كلمة <b>new</b>!).</div>
+<pre><span class="kw">public class</span> <span class="tp">AccountService</span> : <span class="tp">IAccountService</span>
+{
+    <span class="kw">private readonly</span> <span class="tp">UserManager</span>&lt;<span class="tp">ApplicationUser</span>&gt; _userManager;
+    <span class="kw">private readonly</span> <span class="tp">IConfiguration</span> _configuration;
+
+    <span class="kw">public</span> AccountService(<span class="tp">UserManager</span>&lt;<span class="tp">ApplicationUser</span>&gt; userManager, <span class="tp">IConfiguration</span> configuration)
+    {
+        _userManager = userManager;
+        _configuration = configuration;
+    }
+
+    <span class="kw">public async</span> <span class="tp">Task</span>&lt;<span class="kw">string</span>&gt; Register(<span class="tp">RegisterDTO</span> dTO)
+    {
+        <span class="kw">var</span> reg = <span class="hl">new</span> <span class="tp">ApplicationUser</span>
+        {
+            UserName = dTO.UserName,
+            Email = dTO.Email
+        };
+        <span class="kw">var</span> res = <span class="kw">await</span> _userManager.CreateAsync(reg, dTO.Password);
+        <span class="kw">if</span> (!res.Succeeded) <span class="kw">return</span> <span class="st">"Error in register"</span>;
+        <span class="kw">return</span> <span class="st">"Done"</span>;
+    }
+
+    <span class="kw">public async</span> <span class="tp">Task</span>&lt;<span class="kw">string</span>&gt; Login(<span class="tp">LoginDTO</span> dTO)
+    {
+        <span class="kw">var</span> u = <span class="kw">await</span> _userManager.FindByNameAsync(dTO.UserName);
+        <span class="kw">if</span> (u == <span class="kw">null</span>) <span class="kw">return</span> <span class="st">"error"</span>;
+
+        <span class="kw">var</span> corr = <span class="kw">await</span> _userManager.CheckPasswordAsync(u, dTO.Password);
+        <span class="kw">if</span> (!corr) <span class="kw">return</span> <span class="st">"error"</span>;
+
+        <span class="cm">// 1. الـ Claims (بنحط الـ ID والاسم جوه التوكن)</span>
+        <span class="kw">var</span> claims = <span class="hl">new</span>[]
+        {
+            <span class="hl">new</span> <span class="tp">Claim</span>(<span class="tp">ClaimTypes</span>.NameIdentifier, u.Id.ToString()),
+            <span class="hl">new</span> <span class="tp">Claim</span>(<span class="tp">ClaimTypes</span>.Name, u.UserName!)
+        };
+
+        <span class="cm">// 2. المفتاح والختم</span>
+        <span class="kw">var</span> key = <span class="hl">new</span> <span class="tp">SymmetricSecurityKey</span>(<span class="tp">Encoding</span>.UTF8.GetBytes(_configuration[<span class="st">"JWT:Key"</span>]!));
+        <span class="kw">var</span> cred = <span class="hl">new</span> <span class="tp">SigningCredentials</span>(key, <span class="tp">SecurityAlgorithms</span>.HmacSha256);
+
+        <span class="cm">// 3. تصميم التوكن</span>
+        <span class="kw">var</span> tokens = <span class="hl">new</span> <span class="tp">JwtSecurityToken</span>(
+            claims: claims,
+            signingCredentials: cred,
+            expires: <span class="tp">DateTime</span>.UtcNow.AddDays(1),
+            issuer: _configuration[<span class="st">"JWT:Issuer"</span>],
+            audience: _configuration[<span class="st">"JWT:Audience"</span>]
+        );
+
+        <span class="cm">// 4. طباعة التوكن كنص</span>
+        <span class="kw">return</span> <span class="hl">new</span> <span class="tp">JwtSecurityTokenHandler</span>().WriteToken(tokens);
+    }
+}</pre>
+        </div>
+
+        <!-- ==================== 4. CONTROLLER & CLAIMS ==================== -->
+        <div id="controller" class="section-title">🎮 4. الـ AccountController وسحب الـ UserId</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>AccountController.cs</span>
+                <span class="badge">API / Controllers</span>
+            </div>
+<pre>[<span class="tp">Route</span>(<span class="st">"api/[controller]"</span>)]
+[<span class="tp">ApiController</span>]
+<span class="kw">public class</span> <span class="tp">AccountController</span> : <span class="tp">ControllerBase</span>
+{
+    <span class="kw">private readonly</span> <span class="tp">IAccountService</span> _accountService;
+    <span class="kw">public</span> AccountController(<span class="tp">IAccountService</span> accountService)
+    {
+        _accountService = accountService;
+    }
+
+    [<span class="tp">HttpPost</span>(<span class="st">"login"</span>)] <span class="cm">// أوعى تنسى السطر ده!</span>
+    <span class="kw">public async</span> <span class="tp">Task</span>&lt;<span class="tp">IActionResult</span>&gt; Login(<span class="tp">LoginDTO</span> dTO)
+    {
+        <span class="kw">var</span> es = <span class="kw">await</span> _accountService.Login(dTO);
+        <span class="kw">if</span> (es == <span class="st">"error"</span>) <span class="kw">return</span> BadRequest(<span class="st">"Error"</span>);
+        <span class="kw">return</span> Ok(<span class="hl">new</span> { token = es });
+    }
+
+    [<span class="tp">HttpPost</span>(<span class="st">"register"</span>)] <span class="cm">// أوعى تنسى السطر ده!</span>
+    <span class="kw">public async</span> <span class="tp">Task</span>&lt;<span class="tp">IActionResult</span>&gt; Register(<span class="tp">RegisterDTO</span> dTO)
+    {
+        <span class="kw">var</span> res = <span class="kw">await</span> _accountService.Register(dTO);
+        <span class="kw">if</span> (res != <span class="st">"Done"</span>) <span class="kw">return</span> BadRequest(res);
+        <span class="kw">return</span> Ok(res);
+    }
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>إزاي تسحب الـ UserId من التوكن في أي Controller؟</span>
+                <span class="badge">تريكاية الامتحان</span>
+            </div>
+            <div class="note">بنفس كلمة <code>ClaimTypes.NameIdentifier</code> اللي حطيتها في الـ Login بتسحبها في الـ Controller بـ <code>User.FindFirst</code>:</div>
+<pre>[<span class="tp">Authorize</span>]
+[<span class="tp">HttpPut</span>(<span class="st">"{id}/cancel"</span>)]
+<span class="kw">public</span> <span class="tp">IActionResult</span> Cancel(<span class="kw">int</span> id)
+{
+    <span class="cm">// سحب رقم اليوزر من التوكن:</span>
+    <span class="hl">int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);</span>
+
+    <span class="kw">var</span> res = _bookingService.Cancel(id, userId);
+    <span class="kw">if</span> (!res) <span class="kw">return</span> BadRequest(<span class="st">"Cannot cancel"</span>);
+    <span class="kw">return</span> Ok(res);
+}</pre>
+            <div class="note">وفي الـ <b>Service</b> بتتشيك على الملكية (وشرط الـ 24 ساعة لو مطلوب):</div>
+<pre><span class="kw">var</span> boo = _bookingRepo.GetById(id);
+<span class="kw">if</span> (boo == <span class="kw">null</span> || boo.Status == <span class="st">"Canceled"</span>) <span class="kw">return false</span>;
+<span class="kw">if</span> (boo.ApplicationUserId != userId) <span class="kw">return false</span>; <span class="cm">// مش بتاع اليوزر ده!</span>
+<span class="kw">if</span> (boo.Date - <span class="tp">DateTime</span>.UtcNow &lt; <span class="tp">TimeSpan</span>.FromHours(24)) <span class="kw">return false</span>; <span class="cm">// أقل من 24 ساعة</span></pre>
+        </div>
+
+        <!-- ==================== 5. PAGINATION & FILTERING ==================== -->
+        <div id="pagination" class="section-title">📄 5. الـ Pagination والـ Filtering (كاملة)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>1. في الـ Repo (بترجع IQueryable)</span>
+                <span class="badge">DAL / Repo</span>
+            </div>
+<pre><span class="kw">public</span> <span class="tp">IQueryable</span>&lt;<span class="tp">Product</span>&gt; GetAll()
+{
+    <span class="kw">return</span> _context.products.AsQueryable();
+    <span class="cm">// لو فيه جدول فرعي: return _context.orders.Include(x => x.orderItems);</span>
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>2. في الـ Service (Filter + Sort + Pagination)</span>
+                <span class="badge">BL / Service</span>
+            </div>
+            <div class="note">المعادلة الثابتة للـ Pagination: <code>.Skip((Page - 1) * PageSize).Take(PageSize)</code></div>
+<pre><span class="kw">public</span> <span class="tp">IEnumerable</span>&lt;<span class="tp">ProductReadDTO</span>&gt; GetAll(
+    <span class="kw">int</span> Page = 1,
+    <span class="kw">int</span> PageSize = 10,
+    <span class="kw">string</span>? Category = <span class="kw">null</span>,
+    <span class="tp">DateTime</span>? date = <span class="kw">null</span>,
+    <span class="kw">string</span>? OrderBy = <span class="kw">null</span>)
+{
+    <span class="kw">var</span> prods = _productRepo.GetAll();
+
+    <span class="cm">// 1. Filter بنص (لو اليوزر بعته)</span>
+    <span class="kw">if</span> (!<span class="kw">string</span>.IsNullOrEmpty(Category))
+        prods = prods.Where(x =&gt; x.Category == Category);
+
+    <span class="cm">// 2. Filter بتاريخ (لو اليوزر بعته)</span>
+    <span class="kw">if</span> (date != <span class="kw">null</span>)
+        prods = prods.Where(x =&gt; x.OrderDate.Date == date.Value.Date);
+
+    <span class="cm">// 3. Sorting / ترتيب (لو طلبه)</span>
+    <span class="kw">if</span> (OrderBy == <span class="st">"Price"</span>)
+        prods = prods.OrderBy(x =&gt; x.Price);
+    <span class="kw">else if</span> (OrderBy == <span class="st">"Stock"</span>)
+        prods = prods.OrderBy(x =&gt; x.Stock);
+
+    <span class="cm">// 4. Pagination + التحويل لـ ReadDTO</span>
+    <span class="kw">return</span> prods
+        .<span class="hl">Skip((Page - 1) * PageSize)</span>
+        .<span class="hl">Take(PageSize)</span>
+        .Select(x =&gt; <span class="hl">new</span> <span class="tp">ProductReadDTO</span>
+        {
+            Id = x.Id,
+            Name = x.Name,
+            Price = x.Price,
+            Stock = x.Stock
+        }).ToList();
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>3. في الـ Controller (GetAll)</span>
+                <span class="badge">API / Controller</span>
+            </div>
+            <div class="warn">⚠️ أوعى تنسى علامة الاستفهام <code>?</code> و <code>= null</code> جنب الفلاتر عشان متضربش 400 لو اليوزر سابها فاضية!</div>
+<pre>[<span class="tp">HttpGet</span>]
+<span class="kw">public</span> <span class="tp">IActionResult</span> GetAll(
+    [<span class="tp">FromQuery</span>] <span class="kw">int</span> Page = 1,
+    [<span class="tp">FromQuery</span>] <span class="kw">int</span> PageSize = 10,
+    [<span class="tp">FromQuery</span>] <span class="hl">string?</span> Category = <span class="kw">null</span>,
+    [<span class="tp">FromQuery</span>] <span class="hl">DateTime?</span> date = <span class="kw">null</span>,
+    [<span class="tp">FromQuery</span>] <span class="hl">string?</span> OrderBy = <span class="kw">null</span>)
+{
+    <span class="kw">var</span> prods = _productService.GetAll(Page, PageSize, Category, date, OrderBy);
+    <span class="kw">if</span> (prods == <span class="kw">null</span>) <span class="kw">return</span> NotFound();
+    <span class="kw">return</span> Ok(prods);
+}</pre>
+        </div>
+
+        <!-- ==================== 6. FAMOUS ERRORS ==================== -->
+        <div id="errors" class="section-title">🛠️ 6. أشهر الإيرورات وحلها في ثانية</div>
+
+        <div class="err-card">
+            <div class="err-title">1. '... is a type, which is not valid in the given context' / 'Non-invocable member' / 'Method name expected'</div>
+            <div class="err-fix">
+                <b>السبب:</b> نسيت تكتب كلمة <b><code>new</code></b> قبل اسم الكلاس أو الأوبجكت!<br>
+                <b>راجع الأماكن دي وحط قبلها <code>new</code>:</b><br>
+                • <code>new Claim(...)</code><br>
+                • <code>new SymmetricSecurityKey(...)</code><br>
+                • <code>new SigningCredentials(...)</code><br>
+                • <code>new JwtSecurityToken(...)</code><br>
+                • <code>new JwtSecurityTokenHandler().WriteToken(...)</code><br>
+                • <code>new TokenValidationParameters { ... }</code><br>
+                • <code>.Select(x => new ProductReadDTO { ... })</code><br>
+                • <code>return Ok(new { token = es });</code>
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">2. Unable to resolve service for type 'I...Service' (500 Error)</div>
+            <div class="err-fix">
+                <b>السبب:</b> نسيت تسجل الـ Service أو الـ Repo في <code>Program.cs</code>.<br>
+                <b>الحل:</b> زود <code>builder.Services.AddScoped&lt;IService, Service&gt;();</code>
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">3. 404 Not Found في Postman على فانكشن عليها [Authorize]</div>
+            <div class="err-fix">
+                <b>السبب:</b> الـ Identity شغالة كوكيز ومش شايفة الـ JWT.<br>
+                <b>الحل:</b> في <code>Program.cs</code> جوه <code>AddAuthentication</code> حط:<br>
+                <code>x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;</code><br>
+                <code>x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;</code>
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">4. 400 Bad Request: "The OrderBy / Category field is required"</div>
+            <div class="err-fix">
+                <b>السبب:</b> كتبت <code>string OrderBy</code> من غير علامة استفهام في الـ <code>GetAll</code>.<br>
+                <b>الحل:</b> حط علامة استفهام <b><code>string? OrderBy = null</code></b> في الـ Controller والـ Service.
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">5. 500 Failed to load API definition (أول ما Swagger يفتح)</div>
+            <div class="err-fix">
+                <b>السبب:</b> نسيت تحط <code>[HttpPost("login")]</code> و <code>[HttpPost("register")]</code> أو <code>[HttpGet]</code> فوق الفانكشن في الـ Controller!
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">6. www-authenticate: Bearer (401 Unauthorized)</div>
+            <div class="err-fix">
+                <b>السبب:</b> الفانكشن عليها <code>[Authorize]</code> وبتجربها في Swagger أو من غير توكن.<br>
+                <b>الحل:</b> افتح <b>Postman</b> ⬅️ تبويب <b>Authorization</b> ⬅️ اختار <b>Bearer Token</b> (مش JWT Bearer) ⬅️ الصق التوكن ودوس Send.
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">7. Could not send request (في Postman)</div>
+            <div class="err-fix">
+                <b>السبب:</b> المشروع مقفول في Visual Studio، أو رقم البورت في الرابط غلط.<br>
+                <b>الحل:</b> سيب صفحة Swagger مفتوحة، وانسخ الرابط بالبورت بتاعها بالظبط (مثلاً <code>http://localhost:5213/products</code>).
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">8. IDX10720: key size must be at least '256' bits</div>
+            <div class="err-fix">
+                <b>السبب:</b> الـ <code>JWT:Key</code> في <code>appsettings.json</code> قصير.<br>
+                <b>الحل:</b> طول الـ Key في <code>appsettings.json</code> خليه سطر طويل (أكتر من 35 حرف).
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">9. 'Service' does not implement interface member 'IService...'</div>
+            <div class="err-fix">
+                <b>السبب:</b> اسم الفانكشن أو الباراميترز اللي جواها في الكلاس مختلف عن الـ Interface.<br>
+                <b>الحل:</b> انسخ سطر الفانكشن من الكلاس حطه في الـ Interface بالملّي.
+            </div>
+        </div>
+
+        <div class="err-card">
+            <div class="err-title">10. Error in register (لما بتعمل يوزر جديد)</div>
+            <div class="err-fix">
+                <b>السبب:</b> الباسورد مفيهوش شروط الـ Identity.<br>
+                <b>الحل:</b> اكتب باسورد فيه (كابيتال + سمول + رقم + رمز) زي: <b><code>Shino@123</code></b>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
