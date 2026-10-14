@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دليل الطوارئ والامتحان 100%</title>
+    <style>
+        :root {
+            --bg: #090d16;
+            --card: #151e2e;
+            --card-border: #26354a;
+            --accent: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-amber: #fbbf24;
+            --accent-red: #f87171;
+            --accent-purple: #c084fc;
+            --text: #f8fafc;
+            --code-bg: #030712;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding-bottom: 70px;
+            font-size: 14.5px;
+        }
+
+        /* Sticky Navigation Bar */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(9, 13, 22, 0.96);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 9px 8px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .top-nav::-webkit-scrollbar { display: none; }
+
+        .nav-pill {
+            background: var(--card);
+            color: var(--accent);
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 700;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .nav-pill.green { color: var(--accent-green); border-color: rgba(74, 222, 128, 0.4); }
+        .nav-pill.red { color: var(--accent-red); border-color: rgba(248, 113, 113, 0.4); }
+        .nav-pill.amber { color: var(--accent-amber); border-color: rgba(251, 191, 36, 0.4); }
+
+        .container { max-width: 680px; margin: 0 auto; padding: 10px 12px; }
+
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            border: 1px solid #4f46e5;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .hero h1 { font-size: 17.5px; color: #fff; margin-bottom: 3px; }
+        .hero p { font-size: 13px; color: #c7d2fe; }
+
+        .section-title {
+            font-size: 15.5px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 18px 0 8px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 11px;
+            margin-bottom: 11px;
+        }
+
+        .card-header {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 5px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .note {
+            font-size: 13px;
+            color: #e2e8f0;
+            background: rgba(56, 189, 248, 0.08);
+            border-right: 3px solid var(--accent);
+            padding: 7px 9px;
+            border-radius: 5px;
+            margin: 6px 0;
+        }
+
+        .warn {
+            font-size: 13px;
+            color: #fef08a;
+            background: rgba(251, 191, 36, 0.1);
+            border-right: 3px solid var(--accent-amber);
+            padding: 7px 9px;
+            border-radius: 5px;
+            margin: 6px 0;
+        }
+
+        pre {
+            direction: ltr;
+            text-align: left;
+            background: var(--code-bg);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 9px;
+            overflow-x: auto;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 12.5px;
+            line-height: 1.48;
+            color: #e2e8f0;
+            margin-top: 5px;
+        }
+
+        .kw { color: #f472b6; font-weight: bold; }
+        .tp { color: #38bdf8; }
+        .st { color: #a7f3d0; }
+        .cm { color: #64748b; font-style: italic; }
+        .hl { background: rgba(251, 191, 36, 0.22); padding: 1px 3px; border-radius: 3px; color: #fde047; font-weight: bold; }
+        .hl-green { background: rgba(74, 222, 128, 0.22); padding: 1px 3px; border-radius: 3px; color: #86efac; font-weight: bold; }
+
+        /* Error Box */
+        .err-box {
+            background: #161220;
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            border-right: 4px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 10px 11px;
+            margin-bottom: 9px;
+        }
+        .err-code {
+            font-weight: 800;
+            font-size: 13.5px;
+            color: var(--accent-red);
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .err-desc { font-size: 13px; color: #cbd5e1; }
+        .err-desc b { color: var(--accent-green); }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="#rules" class="nav-pill green">1. شروط البيزنس (الكيس)</a>
+        <a href="#claims" class="nav-pill">2. سحب الـ UserId</a>
+        <a href="#sanity" class="nav-pill amber">3. قبل ما تنادي الدكتور</a>
+        <a href="#errors" class="nav-pill red">4. حل كل الإيرورات (سريع)</a>
+    </nav>
+
+    <div class="container">
+
+        <div class="hero">
+            <h1>🚀 دليل الطوارئ والامتحان (100%)</h1>
+            <p>أنت فاهم ومطبق كل حاجة بإيدك.. افتحه في الطريق بهدوء! 💪</p>
+        </div>
+
+        <!-- ==================== 1. BUSINESS RULES ==================== -->
+        <div id="rules" class="section-title">⭐ 1. كل شروط البيزنس المطلوبة في الكيس</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>أ) شروط التقييم (AddReview)</span>
+                <span class="badge">Service Layer</span>
+            </div>
+            <div class="note">3 شروط ورا بعض: فحص التقييم 1-5 + فحص التسجيل + منع التكرار.</div>
+<pre><span class="kw">public string</span> AddReview(<span class="tp">ReviewWriteDTO</span> dto, <span class="kw">int</span> userId)
+{
+    <span class="cm">// 1. التقييم بين 1 و 5 نجوم</span>
+    <span class="kw">if</span> (dto.Rating &lt; 1 || dto.Rating &gt; 5)
+        <span class="kw">return</span> <span class="st">"Rating must be between 1 and 5."</span>;
+
+    <span class="cm">// 2. هل مسجل في الكورس؟</span>
+    <span class="kw">var</span> isEnrolled = _enrollmentRepo.GetAll()
+        .<span class="hl">Any</span>(e =&gt; e.ApplicationUserId == userId &amp;&amp; e.CourseId == dto.CourseId);
+    <span class="kw">if</span> (!isEnrolled)
+        <span class="kw">return</span> <span class="st">"Must be enrolled in the course."</span>;
+
+    <span class="cm">// 3. هل قيّم قبل كده؟ (منع التكرار)</span>
+    <span class="kw">var</span> alreadyReviewed = _reviewRepo.GetAll()
+        .<span class="hl">Any</span>(r =&gt; r.ApplicationUserId == userId &amp;&amp; r.CourseId == dto.CourseId);
+    <span class="kw">if</span> (alreadyReviewed)
+        <span class="kw">return</span> <span class="st">"Already reviewed this course."</span>;
+
+    <span class="cm">// إضافة وحفظ:</span>
+    <span class="kw">var</span> rev = <span class="kw">new</span> <span class="tp">Review</span> { ApplicationUserId = userId, CourseId = dto.CourseId, Rating = dto.Rating, Feedback = dto.Feedback, CreatedAt = <span class="tp">DateTime</span>.UtcNow };
+    _reviewRepo.Add(rev);
+    _reviewRepo.SaveChanges();
+    <span class="kw">return</span> <span class="st">"Done"</span>;
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ب) تعديل وحذف الريفيو (Ownership)</span>
+                <span class="badge">Service Layer</span>
+            </div>
+<pre><span class="kw">public bool</span> UpdateReview(<span class="kw">int</span> reviewId, <span class="kw">int</span> userId, <span class="tp">ReviewUpdateDTO</span> dto)
+{
+    <span class="kw">var</span> review = _reviewRepo.GetById(reviewId);
+    <span class="kw">if</span> (review == <span class="kw">null</span>) <span class="kw">return false</span>;
+
+    <span class="cm">// شرط الملكية: بتاعه هو بس؟</span>
+    <span class="hl">if (review.ApplicationUserId != userId) return false;</span>
+
+    <span class="cm">// شرط: هل لسه مسجل في الكورس؟</span>
+    <span class="kw">var</span> isEnrolled = _enrollmentRepo.GetAll()
+        .Any(e =&gt; e.ApplicationUserId == userId &amp;&amp; e.CourseId == review.CourseId);
+    <span class="kw">if</span> (!isEnrolled) <span class="kw">return false</span>;
+
+    review.Rating = dto.Rating;
+    review.Feedback = dto.Feedback;
+    _reviewRepo.Update(review);
+    _reviewRepo.SaveChanges();
+    <span class="kw">return true</span>;
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ج) التسجيل في الكورس (Enroll) + الدروس المرتبة</span>
+                <span class="badge">Service Layer</span>
+            </div>
+<pre><span class="cm">// منع التسجيل المكرر في نفس الكورس:</span>
+<span class="kw">var</span> alreadyEnrolled = _enrollmentRepo.GetAll()
+    .<span class="hl">Any</span>(e =&gt; e.ApplicationUserId == userId &amp;&amp; e.CourseId == courseId);
+<span class="kw">if</span> (alreadyEnrolled) <span class="kw">return false</span>;
+
+<span class="cm">// عرض الدروس مرتبة (Ordered Outlines):</span>
+<span class="kw">return</span> _lessonRepo.GetAll()
+    .Where(l =&gt; l.CourseId == courseId)
+    .<span class="hl">OrderBy(l =&gt; l.OrderIndex)</span>
+    .Select(...).ToList();</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>د) شرط الـ 24 ساعة (لو كيس مواعيد/أوردرات)</span>
+                <span class="badge">Service Layer</span>
+            </div>
+<pre><span class="cm">// لو باقي أقل من 24 ساعة يرفض:</span>
+<span class="hl">if (boo.Date - DateTime.UtcNow &lt; TimeSpan.FromHours(24))</span>
+    <span class="kw">return false</span>;</pre>
+        </div>
+
+        <!-- ==================== 2. CLAIMS ==================== -->
+        <div id="claims" class="section-title">🔑 2. سحب الـ UserId في الـ Controller</div>
+
+        <div class="card">
+            <div class="note"><b>السطر الذهبي:</b> حط <code>[Authorize]</code> واسحب الـ ID وابعته للسيرفيس:</div>
+<pre>[<span class="tp">Authorize</span>]
+[<span class="tp">HttpPost</span>]
+<span class="kw">public</span> <span class="tp">IActionResult</span> AddReview(<span class="tp">ReviewWriteDTO</span> dto)
+{
+    <span class="hl-green">int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);</span>
+    <span class="kw">var</span> res = _reviewService.AddReview(dto, userId);
+    <span class="kw">if</span> (res != <span class="st">"Done"</span>) <span class="kw">return</span> BadRequest(res);
+    <span class="kw">return</span> Ok(res);
+}</pre>
+            <div class="warn">⚠️ <b>تنبيه:</b> لو نسيت <code>[Authorize]</code> فوق الفانكشن، السطر ده هيضرب <b>NullReferenceException</b> فوراً لأن مفيش يوزر مسجل!</div>
+        </div>
+
+        <!-- ==================== 3. SANITY CHECKLIST ==================== -->
+        <div id="sanity" class="section-title">✅ 3. قائمة الفحص قبل ما تنادي الدكتور</div>
+
+        <div class="card">
+            <ul style="padding-right: 18px; font-size: 13.5px; line-height: 1.8;">
+                <li>📅 <b>التواريخ:</b> وأنت بتعمل تيست، دايماً حط التاريخ <b>في المستقبل</b> (بعد أسبوع: <code>2026-10-25</code>) عشان متقعش في فخ الـ 24 ساعة.</li>
+                <li>🔗 <b>الأقواس المعقوفة:</b> اتأكد إن الـ Route مكتوب كدة: <b><code>"{id}"</code></b> بين قوسين معقوفين مش <code>"id"</code>.</li>
+                <li>🎯 <b>نوع الـ Method:</b> لو الفانكشن <code>[HttpPut]</code> خليها في بوستمان <b>PUT</b> (لو POST هيديك 405).</li>
+                <li>🔄 <b>الـ Restart:</b> لو عدلت أي حرف في <code>Program.cs</code>، اقفل السيرفر واعمل <b>Run</b> من جديد.</li>
+            </ul>
+        </div>
+
+        <!-- ==================== 4. ERRORS CHEAT SHEET ==================== -->
+        <div id="errors" class="section-title">🛠️ 4. حل أشهر الإيرورات في 5 ثواني</div>
+
+        <div class="err-box">
+            <div class="err-code"><span>405 Method Not Allowed (Allow: PUT)</span></div>
+            <div class="err-desc"><b>السبب:</b> باعت في بوستمان <code>POST</code> والفانكشن نوعها <code>[HttpPut]</code>.<br><b>الحل:</b> غير القائمة في بوستمان لـ <b>PUT</b>.</div>
+        </div>
+
+        <div class="err-box">
+            <div class="err-code"><span>400 Bad Request في الـ Cancel</span></div>
+            <div class="err-desc"><b>السبب:</b> ميعاد الحجز فات أو باقي أقل من 24 ساعة (البيزنس لوجيك شغال صح!).<br><b>الحل:</b> حط تاريخ حجز في المستقبل (بعد أسبوع) وجرب تاني.</div>
+        </div>
+
+        <div class="err-box">
+            <div class="err-code"><span>404 Not Found في سواجر أو بوستمان</span></div>
+            <div class="err-desc"><b>السبب 1:</b> نسيت الأقواس المعقوفة في الكنترولر: <code>[HttpPut("id/...")]</code> $\rightarrow$ صلحها: <b><code>"{id}"</code></b>.<br><b>السبب 2:</b> الـ Id مش موجود في الداتابيز $\rightarrow$ اعمل GET الأول وشوف Id موجود.</div>
+        </div>
+
+        <div class="err-box">
+            <div class="err-code"><span>401 Unauthorized في بوستمان</span></div>
+            <div class="err-desc"><b>السبب:</b> نسخت التوكن بعلامات التنصيص <code>" "</code>.<br><b>الحل:</b> انسخ التوكن الصافي اللي بيبدأ بـ <b><code>eyJ...</code></b> واختاره <b>Bearer Token</b>.</div>
+        </div>
+
+        <div class="err-box">
+            <div class="err-code"><span>NullReferenceException في Register</span></div>
+            <div class="err-desc"><b>السبب:</b> الـ Constructor معكوس في AccountController أو AccountService!<br><b>الحل:</b> اتأكد إنها: <b><code>_accountService = accountService;</code></b> و <b><code>_userManager = userManager;</code></b>.</div>
+        </div>
+
+        <div class="err-box">
+            <div class="err-code"><span>NullReferenceException في Add</span></div>
+            <div class="err-desc"><b>السبب:</b> نسيت تحط <b><code>[Authorize]</code></b> فوق الفانكشن!<br><b>الحل:</b> حط <code>[Authorize]</code> فوقها وتيستها بالتوكن في بوستمان.</div>
+        </div>
+
+        <div class="err-box">
+            <div class="err-code"><span>400 Bad Request: "The ... field is required"</span></div>
+            <div class="err-desc"><b>السبب:</b> نسيت علامة الاستفهام في الـ Filter بالكنترولر.<br><b>الحل:</b> حط علامة استفهام: <b><code>string? OrderBy = null</code></b>.</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
