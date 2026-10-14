@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>شروط الـ Business Rules - Learning Tracker</title>
+    <style>
+        :root {
+            --bg: #0b1120;
+            --card: #1e293b;
+            --card-border: #334155;
+            --accent: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-amber: #fbbf24;
+            --accent-red: #f87171;
+            --accent-purple: #c084fc;
+            --text: #f8fafc;
+            --code-bg: #030712;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.55;
+            padding-bottom: 70px;
+            font-size: 15px;
+        }
+
+        /* Sticky Navigation Bar */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(11, 17, 32, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 10px 8px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .top-nav::-webkit-scrollbar { display: none; }
+
+        .nav-pill {
+            background: var(--card);
+            color: var(--accent);
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .nav-pill.green { color: var(--accent-green); border-color: rgba(74, 222, 128, 0.4); }
+        .nav-pill.purple { color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.4); }
+        .nav-pill.red { color: var(--accent-red); border-color: rgba(248, 113, 113, 0.4); }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            border: 1px solid #6366f1;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 19px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .hero p {
+            font-size: 13.5px;
+            color: #c7d2fe;
+        }
+
+        .section-title {
+            font-size: 16.5px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 22px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 14px;
+        }
+
+        .card-header {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: #334155;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .note {
+            font-size: 13.5px;
+            color: #e2e8f0;
+            background: rgba(56, 189, 248, 0.1);
+            border-right: 3px solid var(--accent);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        .warn {
+            font-size: 13.5px;
+            color: #fef08a;
+            background: rgba(251, 191, 36, 0.12);
+            border-right: 3px solid var(--accent-amber);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        pre {
+            direction: ltr;
+            text-align: left;
+            background: var(--code-bg);
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 11px;
+            overflow-x: auto;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #e2e8f0;
+            margin-top: 6px;
+        }
+
+        .kw { color: #f472b6; font-weight: bold; }
+        .tp { color: #38bdf8; }
+        .st { color: #a7f3d0; }
+        .cm { color: #64748b; font-style: italic; }
+        .hl { background: rgba(251, 191, 36, 0.2); padding: 1px 4px; border-radius: 4px; color: #fde047; font-weight: bold; }
+        .hl-green { background: rgba(74, 222, 128, 0.2); padding: 1px 4px; border-radius: 4px; color: #86efac; font-weight: bold; }
+
+        .err-card {
+            background: #1a1523;
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            border-right: 4px solid var(--accent-red);
+            border-radius: 10px;
+            padding: 11px 12px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط التنقل بالموبايل -->
+    <nav class="top-nav">
+        <a href="#add-review" class="nav-pill green">1. ميثود AddReview</a>
+        <a href="#update-review" class="nav-pill purple">2. Update & Delete Review</a>
+        <a href="#enroll" class="nav-pill">3. ميثود Enroll</a>
+        <a href="#lessons" class="nav-pill">4. الدروس المرتبة</a>
+        <a href="#null-err" class="nav-pill red">5. حل NullReference</a>
+    </nav>
+
+    <div class="container">
+
+        <div class="hero">
+            <h1>🎯 كبسولة الـ Business Rules كاملة</h1>
+            <p>Learning Tracker & Course Review System (اطلع عليها وأنت في الطريق) 🚀</p>
+        </div>
+
+        <!-- ==================== 1. ADD REVIEW ==================== -->
+        <div id="add-review" class="section-title">⭐ 1. ميثود إضافة تقييم (AddReview)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>3 شروط مجمعة في ميثود واحدة</span>
+                <span class="badge">Service Layer</span>
+            </div>
+            <div class="note">
+                <b>الشروط الـ 3 المطلوبة:</b><br>
+                1. لازم يكون مسجل في الكورس (Enrolled).<br>
+                2. ممنوع يكرر التقييم لنفس الكورس.<br>
+                3. التقييم من 1 لـ 5 نجوم.
+            </div>
+<pre><span class="kw">public string</span> AddReview(<span class="tp">ReviewWriteDTO</span> dto, <span class="kw">int</span> userId)
+{
+    <span class="cm">// الشرط 1: فحص التقييم بين 1 و 5 نجوم</span>
+    <span class="kw">if</span> (dto.Rating &lt; 1 || dto.Rating &gt; 5)
+        <span class="kw">return</span> <span class="st">"Rating must be between 1 and 5 stars."</span>;
+
+    <span class="cm">// الشرط 2: هل اليوزر مسجل في الكورس ده أصلاً؟</span>
+    <span class="kw">var</span> isEnrolled = _enrollmentRepo.GetAll()
+        .<span class="hl">Any</span>(e =&gt; e.ApplicationUserId == userId &amp;&amp; e.CourseId == dto.CourseId);
+
+    <span class="kw">if</span> (!isEnrolled)
+        <span class="kw">return</span> <span class="st">"You must be enrolled in this course to leave a review."</span>;
+
+    <span class="cm">// الشرط 3: هل قيّم الكورس ده قبل كده؟ (منع التكرار)</span>
+    <span class="kw">var</span> alreadyReviewed = _reviewRepo.GetAll()
+        .<span class="hl">Any</span>(r =&gt; r.ApplicationUserId == userId &amp;&amp; r.CourseId == dto.CourseId);
+
+    <span class="kw">if</span> (alreadyReviewed)
+        <span class="kw">return</span> <span class="st">"You have already reviewed this course."</span>;
+
+    <span class="cm">// الإضافة العادية:</span>
+    <span class="kw">var</span> review = <span class="kw">new</span> <span class="tp">Review</span>
+    {
+        ApplicationUserId = userId,
+        CourseId = dto.CourseId,
+        Rating = dto.Rating,
+        Feedback = dto.Feedback,
+        CreatedAt = <span class="tp">DateTime</span>.UtcNow
+    };
+
+    _reviewRepo.Add(review);
+    _reviewRepo.SaveChanges();
+    <span class="kw">return</span> <span class="st">"Done"</span>;
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>في الـ Controller (سحب الـ userId)</span>
+                <span class="badge">API / Controller</span>
+            </div>
+<pre>[<span class="tp">Authorize</span>]
+[<span class="tp">HttpPost</span>]
+<span class="kw">public</span> <span class="tp">IActionResult</span> AddReview(<span class="tp">ReviewWriteDTO</span> dto)
+{
+    <span class="hl-green">int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);</span>
+
+    <span class="kw">var</span> result = _reviewService.AddReview(dto, userId);
+    <span class="kw">if</span> (result != <span class="st">"Done"</span>)
+        <span class="kw">return</span> BadRequest(result);
+
+    <span class="kw">return</span> Ok(<span class="kw">new</span> { message = <span class="st">"Review added successfully"</span> });
+}</pre>
+        </div>
+
+        <!-- ==================== 2. UPDATE & DELETE REVIEW ==================== -->
+        <div id="update-review" class="section-title">✏️ 2. تعديل وحذف الريفيو (Ownership)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ميثود UpdateReview (فحص الملكية والتسجيل)</span>
+                <span class="badge">Service Layer</span>
+            </div>
+            <div class="note">
+                <b>الشروط:</b> اليوزر يعدل الريفيو <b>بتاعه هو بس</b>، ويكون <b>لسه مسجل</b> في الكورس.
+            </div>
+<pre><span class="kw">public bool</span> UpdateReview(<span class="kw">int</span> reviewId, <span class="kw">int</span> userId, <span class="tp">ReviewUpdateDTO</span> dto)
+{
+    <span class="kw">var</span> review = _reviewRepo.GetById(reviewId);
+    <span class="kw">if</span> (review == <span class="kw">null</span>) <span class="kw">return false</span>;
+
+    <span class="cm">// الشرط 1: فحص الملكية (بتاع اليوزر ده ولا لأ؟)</span>
+    <span class="hl">if (review.ApplicationUserId != userId)</span>
+        <span class="kw">return false</span>; <span class="cm">// مش بتاعك!</span>
+
+    <span class="cm">// الشرط 2: هل لسه مسجل في الكورس؟</span>
+    <span class="kw">var</span> isEnrolled = _enrollmentRepo.GetAll()
+        .Any(e =&gt; e.ApplicationUserId == userId &amp;&amp; e.CourseId == review.CourseId);
+
+    <span class="kw">if</span> (!isEnrolled) <span class="kw">return false</span>;
+
+    <span class="cm">// تعديل البيانات:</span>
+    <span class="kw">if</span> (dto.Rating &gt;= 1 &amp;&amp; dto.Rating &lt;= 5)
+        review.Rating = dto.Rating;
+
+    review.Feedback = dto.Feedback;
+
+    _reviewRepo.Update(review);
+    _reviewRepo.SaveChanges();
+    <span class="kw">return true</span>;
+}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ميثود DeleteReview (حذف الريفيو الخاص به)</span>
+                <span class="badge">Service Layer</span>
+            </div>
+<pre><span class="kw">public bool</span> DeleteReview(<span class="kw">int</span> reviewId, <span class="kw">int</span> userId)
+{
+    <span class="kw">var</span> review = _reviewRepo.GetById(reviewId);
+    <span class="kw">if</span> (review == <span class="kw">null</span>) <span class="kw">return false</span>;
+
+    <span class="cm">// فحص الملكية:</span>
+    <span class="hl">if (review.ApplicationUserId != userId)</span>
+        <span class="kw">return false</span>;
+
+    _reviewRepo.Delete(review);
+    _reviewRepo.SaveChanges();
+    <span class="kw">return true</span>;
+}</pre>
+        </div>
+
+        <!-- ==================== 3. ENROLLMENT ==================== -->
+        <div id="enroll" class="section-title">🎓 3. ميثود التسجيل في الكورس (Enroll)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>منع التسجيل المكرر</span>
+                <span class="badge">Service Layer</span>
+            </div>
+<pre><span class="kw">public bool</span> EnrollCourse(<span class="kw">int</span> courseId, <span class="kw">int</span> userId)
+{
+    <span class="cm">// الشرط: هل مسجل في نفس الكورس قبل كده؟</span>
+    <span class="kw">var</span> alreadyEnrolled = _enrollmentRepo.GetAll()
+        .<span class="hl">Any</span>(e =&gt; e.ApplicationUserId == userId &amp;&amp; e.CourseId == courseId);
+
+    <span class="kw">if</span> (alreadyEnrolled)
+        <span class="kw">return false</span>; <span class="cm">// مسجل بالفعل</span>
+
+    <span class="kw">var</span> enrollment = <span class="kw">new</span> <span class="tp">Enrollment</span>
+    {
+        ApplicationUserId = userId,
+        CourseId = courseId,
+        EnrolledAt = <span class="tp">DateTime</span>.UtcNow,
+        CompletedLessonsCount = 0
+    };
+
+    _enrollmentRepo.Add(enrollment);
+    _enrollmentRepo.SaveChanges();
+    <span class="kw">return true</span>;
+}</pre>
+        </div>
+
+        <!-- ==================== 4. ORDERED LESSONS ==================== -->
+        <div id="lessons" class="section-title">📑 4. جلب الدروس مرتبة (Ordered Outlines)</div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>ترتيب الدروس حسب OrderIndex</span>
+                <span class="badge">Service Layer</span>
+            </div>
+<pre><span class="kw">public</span> <span class="tp">IEnumerable</span>&lt;<span class="tp">LessonReadDTO</span>&gt; GetCourseLessons(<span class="kw">int</span> courseId)
+{
+    <span class="kw">return</span> _lessonRepo.GetAll()
+        .Where(l =&gt; l.CourseId == courseId)
+        .<span class="hl">OrderBy(l =&gt; l.OrderIndex)</span> <span class="cm">// ⚠️ الترتيب المطلوب في الكيس</span>
+        .Select(l =&gt; <span class="kw">new</span> <span class="tp">LessonReadDTO</span>
+        {
+            Id = l.Id,
+            Title = l.Title,
+            DurationMinutes = l.DurationMinutes,
+            ContentSummary = l.ContentSummary,
+            OrderIndex = l.OrderIndex
+        }).ToList();
+}</pre>
+        </div>
+
+        <!-- ==================== 5. NULL REFERENCE CHECKLIST ==================== -->
+        <div id="null-err" class="section-title">🚨 5. فحص إيرور NullReference في ثواني</div>
+
+        <div class="err-card">
+            <div style="color: var(--accent-red); font-weight: 700; margin-bottom: 6px;">
+                1. بص على الـ Constructor في AccountController أول ما تفتح:
+            </div>
+<pre><span class="kw">private readonly</span> <span class="tp">IAccountService</span> _accountService;
+
+<span class="kw">public</span> AccountController(<span class="tp">IAccountService</span> accountService)
+{
+    <span class="hl-green">_accountService = accountService;</span> <span class="cm">// اتأكد إنها مش معكوسة!</span>
+}</pre>
+        </div>
+
+        <div class="err-card">
+            <div style="color: var(--accent-red); font-weight: 700; margin-bottom: 6px;">
+                2. بص على الـ Constructor في AccountService:
+            </div>
+<pre><span class="kw">private readonly</span> <span class="tp">UserManager</span>&lt;<span class="tp">ApplicationUser</span>&gt; _userManager;
+
+<span class="kw">public</span> AccountService(<span class="tp">UserManager</span>&lt;<span class="tp">ApplicationUser</span>&gt; userManager, <span class="tp">IConfiguration</span> config)
+{
+    <span class="hl-green">_userManager = userManager;</span> <span class="cm">// اتأكد إنها مش معكوسة!</span>
+    _configuration = config;
+}</pre>
+        </div>
+
+        <div class="err-card">
+            <div style="color: var(--accent-red); font-weight: 700; margin-bottom: 6px;">
+                3. اتأكد من وراثة ApplicationContext.cs:
+            </div>
+<pre><span class="kw">public class</span> <span class="tp">ApplicationContext</span> : <span class="hl-green">IdentityDbContext&lt;ApplicationUser, IdentityRole&lt;int&gt;, int&gt;</span></pre>
+        </div>
+
+    </div>
+
+</body>
+</html>
